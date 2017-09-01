@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<style>
+    html,body{
+        padding: 0;
+        margin: 0;
+        width:100%;
+        height: 100%;
+    }
+    #box{
+        width:100px;
+        height: 100px;
+        background-color: green;
+        cursor: pointer;
+        position: absolute;
+    }
+</style>
+<body>
+    <div id="box"></div>
+</body>
+<script>
+    (function(){
+        var Drag = function(){
+            this.box=document.getElementById("box");
+            //screen size
+            this.clientWidth=document.body.clientWidth-this.box.offsetWidth;
+            this.clientHeight=document.body.clientHeight-this.box.offsetHeight;
+            //mouse positon
+            this.downX='';
+            this.downY='';
+            //box position
+            this.boxLeft='';
+            this.boxTop='';
+            //与外部容器的距离
+            this.offsetLeft='';
+            this.offsetTop='';
+        }
+        Drag.prototype={
+            init:function(){
+                var that=this;
+                this.box.onmousedown=function(e){
+                    that.downX=e.x;
+                    that.downY=e.y;
+                    that.offsetLeft=e.offsetX;
+                    that.offsetTop=e.offsetY;
+
+                    that.move();
+                }
+
+                document.onmouseup=function(e){
+                    document.onmousemove=null;
+                }
+
+                
+
+                return this;
+            },
+            move:function(){
+                var that=this;
+                document.onmousemove=function(e){
+                        that.downX=e.x;
+                        that.downY=e.y;
+
+                        that.boxLeft=that.downX-that.offsetLeft;
+                        that.boxTop=that.downY-that.offsetTop;
+                        console.log(that.boxLeft,that.boxTop)
+                        that.judgeRange();
+                    }
+                    return this;
+            },
+            judgeRange:function(){
+                if(this.boxLeft<0)
+                    this.boxLeft=0;
+                // else if()
+
+                if(this.boxTop<0)
+                    this.boxTop=0;
+                if(this.boxLeft>this.clientWidth)
+                    this.boxLeft=this.clientWidth;
+                if(this.boxTop>this.clientHeight)
+                    this.boxTop=this.clientHeight;
+
+                this.box.style.left=this.boxLeft+'px';
+                this.box.style.top=this.boxTop+'px';
+            }
+        }
+        var drag=new Drag().init();
+    })()
+</script>
+</html>
