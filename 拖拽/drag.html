@@ -27,7 +27,9 @@
 </style>
 <body>
     <div id="container">
-        <div id="box"></div>
+        <div id="box">
+        <img  src="./images/box.png" draggable="true"/>
+        </div>
     </div>
     
 </body>
@@ -61,9 +63,11 @@
                     that.offsetLeft=e.offsetX;
                     that.offsetTop=e.offsetY;
 
-                    that.move();
+                    that.move(); 
                 }
 
+                document.ondragstart=function() {return false;}
+                
                 document.onmouseup=function(e){
                     document.onmousemove=null;
                 }
