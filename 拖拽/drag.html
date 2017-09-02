@@ -17,14 +17,25 @@
         cursor: pointer;
         position: absolute;
     }
+    #container{
+        position: absolute;
+        left: 20%;
+        border: 1px dashed blue;
+        width: 500px;
+        height: 500px;
+    }
 </style>
 <body>
-    <div id="box"></div>
+    <div id="container">
+        <div id="box"></div>
+    </div>
+    
 </body>
 <script>
     (function(){
         var Drag = function(){
-            this.box=document.getElementById("box");
+            this.box=document.getElementById("box") || null;
+            this.container=document.getElementById("container") || null;
             //screen size
             this.clientWidth=document.body.clientWidth-this.box.offsetWidth;
             this.clientHeight=document.body.clientHeight-this.box.offsetHeight;
@@ -37,6 +48,9 @@
             //与外部容器的距离
             this.offsetLeft='';
             this.offsetTop='';
+            //如果有容器包含拖拽对象
+            this.containerLeft=getComputedStyle(this.container ? this.container:null, null).getPropertyValue("left");
+            this.containerTop=getComputedStyle(this.container ? this.container:null, null).getPropertyValue("top");
         }
         Drag.prototype={
             init:function(){
@@ -64,24 +78,23 @@
                         that.downX=e.x;
                         that.downY=e.y;
 
-                        that.boxLeft=that.downX-that.offsetLeft;
-                        that.boxTop=that.downY-that.offsetTop;
+                        that.boxLeft=that.downX-that.offsetLeft-parseFloat(that.containerLeft);
+                        that.boxTop=that.downY-that.offsetTop-parseFloat(that.containerTop);
                         console.log(that.boxLeft,that.boxTop)
                         that.judgeRange();
                     }
                     return this;
             },
             judgeRange:function(){
-                if(this.boxLeft<0)
-                    this.boxLeft=0;
-                // else if()
+                // if(this.boxLeft<0)
+                //     this.boxLeft=0;
 
-                if(this.boxTop<0)
-                    this.boxTop=0;
-                if(this.boxLeft>this.clientWidth)
-                    this.boxLeft=this.clientWidth;
-                if(this.boxTop>this.clientHeight)
-                    this.boxTop=this.clientHeight;
+                // if(this.boxTop<0)
+                //     this.boxTop=0;
+                // if(this.boxLeft>this.clientWidth)
+                //     this.boxLeft=this.clientWidth;
+                // if(this.boxTop>this.clientHeight)
+                //     this.boxTop=this.clientHeight;
 
                 this.box.style.left=this.boxLeft+'px';
                 this.box.style.top=this.boxTop+'px';
